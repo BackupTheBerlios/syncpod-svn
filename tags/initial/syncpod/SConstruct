@@ -1,0 +1,58 @@
+## Copyright (c)2005 Jean-Baptiste Lab (jean-baptiste dot lab at laposte dot net)
+## See the file copying.txt for copying permission.
+
+from os.path import join
+
+# Setup the options
+opts = Options( 'syncPod.conf' )
+opts.Add( 'debug', 'Set to 1 to build with debug symbols', 0 )
+opts.Add( 'tests', 'Set to 1 to build and run unit tests', 0 )
+opts.Add( 'rlog', 'Set to 1 to try to use the rLog library', 0 )
+opts.Add( 'nvwa', 'Set to 1 to try to use the "Stones of Nvwa" library', 0 )
+
+# Set up the env
+CPPFLAGS   = [ '-Wall' ]
+CPPDEFINES = []
+LIBS       = []
+
+env = Environment( options = opts )
+
+Help(opts.GenerateHelpText(env))
+
+if int( env['debug'] ) == 1:
+    CPPFLAGS += [ '-g' ]
+else:
+    CPPFLAGS += [ '-O2' ]
+
+if int( env['tests'] ) == 1:
+    CPPDEFINES += [ 'UNIT_TESTS' ]
+
+conf = env.Configure()
+if int( env['rlog'] ) == 1:
+    # Check for rLog availability (lib will be appended if detected)
+    if conf.CheckLib( 'rlog' ) is True:
+        env.Append( CPPDEFINES = [ 'HAVE_RLOG' ] )
+        env.Append( CPPDEFINES = [ 'RLOG_COMPONENT="syncPod"' ] )
+if int( env['nvwa'] ) == 1:
+    # Check for nvwa availability, only if in debug  (lib will be appended if detected)
+    if conf.CheckLib( 'nvwa' ) is True:
+        env.Append( CPPDEFINES = [ 'HAVE_NVWA' ] )
+conf.Finish()
+
+env.Append( CXXFLAGS = CPPFLAGS )
+env.Append( CPPDEFINES = CPPDEFINES )
+env.Append( LIBS = LIBS )
+
+# Determine where to install files
+installPrefix = 'c:/mingw'
+
+if int( env['tests'] ) == 1:
+    SConscript( 'test/SConscript', build_dir = 'bld/test', exports = ['env'], duplicate = 0 )
+# Do it!
+directory, binary, library, headers = SConscript( 'src/SConscript', build_dir = 'bld/src', exports = ['env'], duplicate = 0 )
+
+# Install (not a default target)
+Install( join( installPrefix, 'lib' ), library )
+Install( join( installPrefix, 'include', directory ), headers )
+Install( join( installPrefix, 'bin' ), binary )
+Alias('install', installPrefix )
