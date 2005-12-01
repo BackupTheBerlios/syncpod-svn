@@ -1,0 +1,24 @@
+## Copyright (c)2005 Jean-Baptiste Lab (jean-baptiste dot lab at laposte dot net)
+## See the file copying.txt for copying permission.
+
+Import( 'env' )
+test = env.Program( 'configFile_test',
+                    [ 'configFile_test.cpp' ],
+                    CPPPATH = [ '#' ],
+                    LIBPATH = [ '#bld/src' ],
+                    LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
+env.AddPostAction( test, str(test[0].abspath ))
+
+test = env.Program( 'direnum_test',
+                    [ 'direnum_test.cpp' ],
+                    CPPPATH = [ '#' ],
+                    LIBPATH = [ '#bld/src' ],
+                    LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
+env.AddPostAction( test, str(test[0].abspath ))
+
+test = env.Program( 'podsync_test',
+                    [ 'podsync_test.cpp' ],
+                    CPPPATH = [ '#' ],
+                    LIBPATH = [ '#bld/src' ],
+                    LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
+env.AddPostAction( test, str(test[0].abspath ))

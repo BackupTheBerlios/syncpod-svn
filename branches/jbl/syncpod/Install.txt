@@ -1,0 +1,58 @@
+ ____                   ____           _ 
+/ ___| _   _ _ __   ___|  _ \ ___   __| |
+\___ \| | | | '_ \ / __| |_) / _ \ / _` |
+ ___) | |_| | | | | (__|  __/ (_) | (_| |
+|____/ \__, |_| |_|\___|_|   \___/ \__,_|
+       |___/                             
+
+Platforms:
+==========
+
+This software was developped on Windows XP, using the mingw compiler and the msys shell suite, see http://www.mingw.org/.
+
+Installation instructions:
+==========================
+
+Dependencies:
+
+- scons, excellent software construction tool painless "make" replacement, can be obtained there: http://www.scons.org
+- optional cppunitlite library (for unit tests), can be obtained there: http://www.objectmentor.com/resources/downloads/bin/CppUnitLite.zip
+- optional excellent "Stones of Nvwa" library (for memory leaks), can be obtained there: http://sourceforge.net/projects/nvwa
+- optional excellent "rLog" library (for logging), can be obtained there: http://arg0.net/wiki/rlog
+
+Decompress the archive, cd into the resulting directory and at a command prompt:
+prompt> scons
+
+This will build syncPod.exe in the bld/src directory.
+
+prompt> scons -h
+
+will give you the options you can set:
+
+debug: Set to 1 to build with debug symbols
+    default: 0
+    actual: 0
+
+tests: Set to 1 to build and run unit tests
+    default: 0
+    actual: 0
+
+rlog: Set to 1 to try to use the rLog library
+    default: 0
+    actual: 0
+
+nvwa: Set to 1 to try to use the "Stones of Nvwa" library
+    default: 0
+    actual: 0
+
+- Setting 'debug' to 1 (scons debug=1) will allow you to run the program inside gdb
+- Setting 'tests' to 1 (scons tests=1) will compile and run the unit tests for the helper classes
+- Setting 'rlog' to 1 (scons rlog=1) will attempt to detect whether the rlog development files are 
+present and use them (provide feedback about what the program is doing on stdout).
+- Setting 'nvwa' to 1 (scons nvwa=1) will attempt to detect whether the "Stones of Nvwa" 
+development files are present and use them (will report memory leaks information)
+
+====================================================================================================
+
+Copyright (c)2005 Jean-Baptiste Lab (jean-baptiste dot lab at laposte dot net)
+See the file copying.txt for copying permission.

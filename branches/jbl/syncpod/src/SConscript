@@ -1,0 +1,19 @@
+## Copyright (c)2005 Jean-Baptiste Lab (jean-baptiste dot lab at laposte dot net)
+## See the file copying.txt for copying permission.
+
+Import( 'env' )
+directory = ''
+binary    = []
+library   = []
+headers   = []
+env.Library( 'synPod-utils',
+             [ 'ConfigFile.cpp',
+               'DirectoryEnum.cpp',
+               'FileInfo.cpp',
+               'Podsync.cpp' ] )
+binary = env.Program( "syncPod",
+                      [ "syncPod.cpp" ],
+                      LIBPATH = [ '.' ],
+                      LIBS = ['synPod-utils'] + env['LIBS'],
+                      LINKFLAGS = ['-mwindows'] )
+Return( "directory", "binary", "library", "headers" )
