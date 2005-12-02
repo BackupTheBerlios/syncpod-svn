@@ -11,6 +11,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#if defined __CYGWIN32__
+/* */
+#include <sys/stat.h>
+#endif
 
 #if defined HAVE_NVWA
 #include <nvwa/debug_new.h>
@@ -48,12 +52,15 @@ bool PodSync::copy( const char *pSrc, const char *pDst )
   }
   char *buffer = new char[102400];
   unsigned int bytesRead;
+  unsigned int bytesWritten;
   do
   {
     bytesRead = fread( buffer, 1, 102400, src );
-    if( bytesRead != fwrite( buffer, 1, bytesRead, dst ))
+    bytesWritten = fwrite( buffer, 1, bytesRead, dst );
+    if( bytesRead != bytesWritten )
     {
-      rError( "Writing %s failed", pDst );
+      rError( "Writing %s failed (read %d, written %d)", pDst, bytesRead, bytesWritten );
+      perror( 0 );
       fclose( dst );
       fclose( src);
       delete[] buffer;
@@ -147,7 +154,11 @@ bool PodSync::makeDirs( const char *pPath )
     if( 0 != *pIndex )
     {
       *pIndex = 0;
+#if defined __CYGWIN32__
+      if( 0 != mkdir( pStart, 0700 ))
+#else
       if( 0 != mkdir( pStart ))
+#endif
       {
         if( EEXIST != errno )
         {
@@ -163,7 +174,11 @@ bool PodSync::makeDirs( const char *pPath )
   // The +1 here takes care of attempting to mkdir '/' (which fails)
   if( pIndex != pStart && pIndex != ( pStart + 1 ))
   {
-    if( 0 != mkdir( pStart ))
+#if defined __CYGWIN32__
+      if( 0 != mkdir( pStart, 0700 ))
+#else
+      if( 0 != mkdir( pStart ))
+#endif
     {
       if( EEXIST != errno )
       {

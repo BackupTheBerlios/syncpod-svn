@@ -9,12 +9,13 @@ opts.Add( 'debug', 'Set to 1 to build with debug symbols', 0 )
 opts.Add( 'tests', 'Set to 1 to build and run unit tests', 0 )
 opts.Add( 'rlog', 'Set to 1 to try to use the rLog library', 0 )
 opts.Add( 'nvwa', 'Set to 1 to try to use the "Stones of Nvwa" library', 0 )
+opts.Add( 'prefix', 'Set the installation prefix', '' )
 
 # Set up the env
 CPPFLAGS   = [ '-Wall' ]
 CPPDEFINES = []
 LIBS       = []
-
+SConsignFile( '.syncpod_sign' )
 env = Environment( options = opts )
 
 Help(opts.GenerateHelpText(env))
@@ -33,10 +34,14 @@ if int( env['rlog'] ) == 1:
     if conf.CheckLib( 'rlog' ) is True:
         env.Append( CPPDEFINES = [ 'HAVE_RLOG' ] )
         env.Append( CPPDEFINES = [ 'RLOG_COMPONENT="syncPod"' ] )
+    else:
+        print "Warning: rLog is not available, compiling without it!"
 if int( env['nvwa'] ) == 1:
     # Check for nvwa availability, only if in debug  (lib will be appended if detected)
     if conf.CheckLib( 'nvwa' ) is True:
         env.Append( CPPDEFINES = [ 'HAVE_NVWA' ] )
+    else:
+        print "Warning: nvwa is not available, compiling without it!"
 conf.Finish()
 
 env.Append( CXXFLAGS = CPPFLAGS )
@@ -44,7 +49,12 @@ env.Append( CPPDEFINES = CPPDEFINES )
 env.Append( LIBS = LIBS )
 
 # Determine where to install files
-installPrefix = 'c:/mingw'
+installPrefix = ''
+if env['prefix'] is '':
+    if env['PLATFORM'] == 'cygwin':
+        installPrefix = '/usr'
+    elif env['PLATFORM'] == 'win32':
+        installPrefix = 'c:/mingw'
 
 if int( env['tests'] ) == 1:
     SConscript( 'test/SConscript', build_dir = 'bld/test', exports = ['env'], duplicate = 0 )
