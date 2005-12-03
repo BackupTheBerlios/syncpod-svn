@@ -7,7 +7,7 @@ from os.path import join
 opts = Options( 'syncPod.conf' )
 opts.Add( 'debug', 'Set to 1 to build with debug symbols', 0 )
 opts.Add( 'tests', 'Set to 1 to build and run unit tests', 0 )
-opts.Add( 'rlog', 'Set to 1 to try to use the rLog library', 0 )
+opts.Add( 'rlog', 'Set to 1 to try to use the rLog library', 1 )
 opts.Add( 'nvwa', 'Set to 1 to try to use the "Stones of Nvwa" library', 0 )
 opts.Add( 'prefix', 'Set the installation prefix', '' )
 
