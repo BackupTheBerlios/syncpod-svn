@@ -245,7 +245,7 @@ bool PodSync::performSync( const char *pSrc, const char *pDst )
       result = processOneItem( pSrcInfo, &dstInfo );
       if( false == result )
       {
-        break;
+        rError( "Sync %s failed", pSrcInfo->getName() );
       }
       pSrcInfo = srcEnumerator.findNext();
     }
