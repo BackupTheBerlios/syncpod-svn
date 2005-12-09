@@ -22,3 +22,10 @@ test = env.Program( 'podsync_test',
                     LIBPATH = [ '#bld/src' ],
                     LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
 env.AddPostAction( test, str(test[0].abspath ))
+
+test = env.Program( 'fileinfo_test',
+                    [ 'fileinfo_test.cpp' ],
+                    CPPPATH = [ '#' ],
+                    LIBPATH = [ '#bld/src' ],
+                    LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
+env.AddPostAction( test, str(test[0].abspath ))
