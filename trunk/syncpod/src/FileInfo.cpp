@@ -65,13 +65,6 @@ const char *FileInfo::getName()
   return m_pName;
 }
 
-void FileInfo::setName( const char *pName )
-{
-  reset();
-  m_pName = new char[ strlen( pName ) + 1];
-  strcpy( m_pName, pName );
-}
-
 int FileInfo::getAccessTime()
 {
   return m_accessTime;
