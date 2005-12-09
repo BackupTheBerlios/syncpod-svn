@@ -227,13 +227,13 @@ bool PodSync::performSync( const char *pSrc, const char *pDst )
   }
   
   // Check that destination is a directory
-  if( false == dstInfo.getIsDir() )
+  if( false == dstInfo.isDir() )
   {
     rError( "%s is not a directory", pDst );
     return false;
   }
   rInfo( "Source: %s", srcInfo.getName() );
-  if( true == srcInfo.getIsDir() )
+  if( true == srcInfo.isDir() )
   {
     rInfo( "Enumerating %s", srcInfo.getName() );
     // Skip . and ..

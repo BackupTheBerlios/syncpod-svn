@@ -80,7 +80,7 @@ int FileInfo::getCreationTime()
   return m_creationTime;
 }
 
-bool FileInfo::getIsDir()
+bool FileInfo::isDir()
 {
   return m_isDir;
 }

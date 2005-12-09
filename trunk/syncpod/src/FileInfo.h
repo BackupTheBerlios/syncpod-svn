@@ -44,7 +44,7 @@ class FileInfo
    * @brief Determine whether this instance is a directory.
    * @return true if instance is a directory
    */  
-  bool  getIsDir();
+  bool  isDir();
   /**
    * @brief Update this instance with information for the given file name.
    * @param pName [in] name of file/directory for which to retrieve info

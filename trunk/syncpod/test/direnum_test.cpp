@@ -32,7 +32,7 @@ TEST( DirectoryEnum, findFirstVerifyData )
   DirectoryEnum enumerator;
   FileInfo *pInfo = enumerator.findFirst( "." );
   // We *know* it is a directory (1st entry is '.')
-  CHECK( 0 != pInfo && 0 != pInfo->getName() && 0 != pInfo->getAccessTime() && true == pInfo->getIsDir() );
+  CHECK( 0 != pInfo && 0 != pInfo->getName() && 0 != pInfo->getAccessTime() && true == pInfo->isDir() );
 }
 
 TEST( DirectoryEnum, findNextCheck )
@@ -49,7 +49,7 @@ TEST( DirectoryEnum, findNextVerifyData )
   FileInfo *pInfo = enumerator.findFirst( "." );
   pInfo = enumerator.findNext();
   // We *know* it is a directory (2nd entry is '..')
-  CHECK( 0 != pInfo && 0 != pInfo->getName() && 0 != pInfo->getAccessTime() && true == pInfo->getIsDir() );
+  CHECK( 0 != pInfo && 0 != pInfo->getName() && 0 != pInfo->getAccessTime() && true == pInfo->isDir() );
 }
 
 TEST( DirectoryEnum, doubleFindFirst )
