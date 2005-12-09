@@ -69,5 +69,5 @@ int main( int argc, char *argv[] )
 {
   TestResult result;
   TestRegistry::runAllTests( result );
-  return 0;
+  return result.getFailureCount();
 }
