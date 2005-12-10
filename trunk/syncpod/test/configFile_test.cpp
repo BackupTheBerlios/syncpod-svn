@@ -64,6 +64,17 @@ TEST( ConfigFile, writeAppend )
   CHECK( true == cfg.write() );
 }
 
+TEST( ConfigFile, dupStr )
+{
+  ConfigFile cfg( "bld/test/auto_cfg_0.cfg" );
+  char *dup = cfg.dupStr( "key1" );
+  CHECK( 0 != dup );
+  if( 0 != dup )
+  {
+    delete[] dup;
+  }
+}
+
 int main( int argc, char *argv[] )
 {
   TestResult result;

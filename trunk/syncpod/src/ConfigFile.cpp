@@ -20,7 +20,7 @@ ConfigFile::ConfigFile()
 
 ConfigFile::ConfigFile( const char *pName )
 {
-  m_name    = strdup( pName );
+  m_name    = dupStr( pName );
   m_data    = NULL;
   m_numKeys = 0;
   reload();
@@ -30,7 +30,7 @@ ConfigFile::~ConfigFile()
 {
   if( NULL != m_name )
   {
-    free( m_name );
+    delete[] m_name;
   }
   if( NULL != m_data )
   {
@@ -38,15 +38,26 @@ ConfigFile::~ConfigFile()
     {
       if( NULL != m_data[i].key )
       {
-        free( m_data[i].key );
+        delete[] m_data[i].key;
       }
       if( NULL != m_data[i].value )
       {
-        free( m_data[i].value );
+        delete[] m_data[i].value;
       }
     }
     delete[] m_data;
   }
+}
+
+char *ConfigFile::dupStr( const char *pStr )
+{
+  char *result = 0;
+  if( 0 != pStr )
+  {
+    result = new char[ strlen( pStr ) + 1 ];
+    strcpy( result, pStr );
+  }
+  return result;
 }
 
 const char *ConfigFile::getString( const char *pKey )
@@ -78,11 +89,11 @@ void ConfigFile::setString( const char *pKey, const char *pValue )
       {
         if( NULL != m_data[i].value )
         {
-          free( m_data[i].value );
+          delete[] m_data[i].value;
         }
         if( NULL !=  pValue )
         {
-          m_data[i].value = strdup( pValue );
+          m_data[i].value = dupStr( pValue );
         }
         else
         {
@@ -100,8 +111,8 @@ void ConfigFile::setString( const char *pKey, const char *pValue )
         delete[] m_data;
         m_data = pNewData;
       }
-      m_data[m_numKeys].key   = strdup( pKey );
-      m_data[m_numKeys].value = strdup( pValue );
+      m_data[m_numKeys].key   = dupStr( pKey );
+      m_data[m_numKeys].value = dupStr( pValue );
       m_numKeys++;
     }
   }
@@ -110,8 +121,8 @@ void ConfigFile::setString( const char *pKey, const char *pValue )
     m_data = new ConfigData[2];
     if( NULL != m_data )
     {
-      m_data[0].key   = strdup( pKey );
-      m_data[0].value = strdup( pValue );
+      m_data[0].key   = dupStr( pKey );
+      m_data[0].value = dupStr( pValue );
       m_numKeys = 1;
     }
   }
@@ -121,12 +132,12 @@ void ConfigFile::setName( const char *pName )
 {
   if( NULL != m_name )
   {
-    free( m_name );
+    delete[] m_name;
     m_name = NULL;
   }
   if( NULL != pName )
   {
-    m_name = strdup( pName );
+    m_name = dupStr( pName );
   }
   else
   {
@@ -158,11 +169,11 @@ bool ConfigFile::write( const char *pName )
   bool result;
   if( NULL != m_name )
   {
-    tempName = strdup( m_name );
+    tempName = dupStr( m_name );
     setName( pName );
     result = write();
     setName( tempName );
-    free( tempName );
+    delete[] tempName;
   }
   else
   {
@@ -219,9 +230,9 @@ bool ConfigFile::reload()
                 m_data = pNewData;
               }
             }
-            m_data[m_numKeys].key               = strdup( buffer );
+            m_data[m_numKeys].key               = dupStr( buffer );
             m_data[m_numKeys].key[equal-buffer] = '\0';
-            m_data[m_numKeys].value             = strdup( equal + 1 );
+            m_data[m_numKeys].value             = dupStr( equal + 1 );
             m_numKeys++;
           }
         }

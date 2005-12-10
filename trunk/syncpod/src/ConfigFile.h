@@ -25,6 +25,20 @@ class ConfigFile
   } ConfigData;
   ConfigData *m_data;           //!< Dynamically sized array of config items
   int m_numKeys;                //!< Number of elements in the config array
+
+#if defined (UNIT_TESTS)
+ public:
+#endif
+  /**
+   * @brief Equivalent of strdup (which is not ANSI).
+   * 
+   * Equivalent of strdup, implemented using new[], allowing this to be
+   * taken into account by nvwa.
+   * @param pStr [in] string to duplicate
+   * @return pointer to copy of string, 0 if no more memory
+   * @important remember to delete[] the returned value
+   */
+  char *dupStr( const char *pStr );
  public:
   ConfigFile();
   ConfigFile( const char *pFile );
