@@ -12,7 +12,6 @@
 #include <string.h>
 #include <errno.h>
 #if defined __CYGWIN32__
-/* */
 #include <sys/stat.h>
 #endif
 
@@ -31,6 +30,25 @@ PodSync::PodSync()
 PodSync::~PodSync()
 {
   delete m_pConfig;
+}
+
+const char *PodSync::basename( const char *pPath )
+{
+  const char *pBasename = strrchr( pPath, '/' );
+  // Backslash maybe ?
+  if( 0 == pBasename )
+  {
+    pBasename = strrchr( pPath, '\\' );
+  }
+  if( 0 != pBasename )
+  {
+    pBasename++;
+  }
+  else
+  {
+    pBasename = pPath;
+  }
+  return pBasename;
 }
 
 bool PodSync::copy( const char *pSrc, const char *pDst )
@@ -76,24 +94,10 @@ bool PodSync::copy( const char *pSrc, const char *pDst )
 bool PodSync::processOneItem( FileInfo *pSrcInfo, FileInfo *pDstInfo )
 {
   FileInfo info;
-  DirectoryEnum enumerator;
   // Assume things are ok
   bool result = true;
   const char *srcFileName;
-  srcFileName = strrchr( pSrcInfo->getName(), '/' );
-  // Backslash maybe ?
-  if( 0 == srcFileName )
-  {
-    srcFileName = strrchr( pSrcInfo->getName(), '\\' );
-  }
-  if( 0 != srcFileName )
-  {
-    srcFileName++;
-  }
-  else
-  {
-    srcFileName = pSrcInfo->getName();
-  }
+  srcFileName = basename( pSrcInfo->getName() );
   
   // + 2 for the path separator and the final 0
   char *dstFileName = new char[ strlen( pDstInfo->getName() ) + strlen( srcFileName ) + 2 ];
@@ -105,8 +109,21 @@ bool PodSync::processOneItem( FileInfo *pSrcInfo, FileInfo *pDstInfo )
   // Ok, destination does not exist, copy
   if( false == info.getInfo( dstFileName ))
   {
-    rInfo( "Copying %s to %s as it does not exist", pSrcInfo->getName(), dstFileName ) ;
-    result = copy( pSrcInfo->getName(), dstFileName );
+    if( false == pSrcInfo->isDir() )
+    {
+      rInfo( "Copying %s to %s as it does not exist", pSrcInfo->getName(), dstFileName ) ;
+      result = copy( pSrcInfo->getName(), dstFileName );
+    }
+    else
+    {
+      const char *srcBaseName = basename( pSrcInfo->getName() );
+      char *pNewDst = new char[ strlen( pDstInfo->getName() ) + strlen( srcBaseName ) + 2 ];
+      strcpy( pNewDst, pDstInfo->getName() );
+      strcat( pNewDst, "/" );
+      strcat( pNewDst, srcBaseName );
+      performSync( pSrcInfo->getName(), pNewDst );
+      delete[] pNewDst;
+    }
   }
   else
   {

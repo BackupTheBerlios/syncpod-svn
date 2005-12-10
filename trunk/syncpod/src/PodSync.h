@@ -89,11 +89,25 @@ class PodSync
    * @brief Create a directory.
    * 
    * Creates a directory. The missing component of the path will be created.
-   * @param pPath [in] pathn name to create
+   * @param pPath [in] path name to create
    * @return true if the creation was successful.
    */  
   bool makeDirs( const char *pPath );
-  bool processOneItem( FileInfo *, FileInfo * );
+  /**
+   * @brief Process a synchronization item.
+   * 
+   * @param pSrc [in]
+   * @param pDst [in]
+   * @return true if the synchro was successful.
+   */  
+  bool processOneItem( FileInfo *pSrc, FileInfo *pDst );
+  /**
+   * @brief Return the basename of a path.
+   * 
+   * @param pPath [in] path to extract the basename from
+   * @return right most component of the given path.
+   */  
+  const char *basename( const char *pPath );
  public:
   PodSync();
   ~PodSync();

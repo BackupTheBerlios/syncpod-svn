@@ -4,6 +4,7 @@
 #include <cppunitlite/Test.h>
 #include <cppunitlite/TestResult.h>
 #include <cppunitlite/TestRegistry.h>
+#include <string.h>
 
 #include "src/PodSync.h"
 
@@ -77,6 +78,38 @@ TEST( PodSync, makeDirs9 )
 {
   PodSync podSync;
   CHECK( true == podSync.makeDirs( "bld\\test\\makedirs\\tests\\of\\deep\\dirs\\endBackSlash\\" ));
+}
+
+TEST( PodSync, basename1 )
+{
+  PodSync podSync;
+  const char *pPath = "bld\\test\\makedirs\\tests\\of\\deep\\dirs";
+  const char *pBasename = "dirs";
+  CHECK( 0 == strcmp( podSync.basename( pPath ), pBasename ));
+}
+
+TEST( PodSync, basename2 )
+{
+  PodSync podSync;
+  const char *pPath = "tests/of/deep/dirs";
+  const char *pBasename = "dirs";
+  CHECK( 0 == strcmp( podSync.basename( pPath ), pBasename ));
+}
+
+TEST( PodSync, basename3 )
+{
+  PodSync podSync;
+  const char *pPath = "tests/of/deep/dirs/";
+  const char *pBasename = "";
+  CHECK( 0 == strcmp( podSync.basename( pPath ), pBasename ));
+}
+
+TEST( PodSync, basename4 )
+{
+  PodSync podSync;
+  const char *pPath = "tests";
+  const char *pBasename = "tests";
+  CHECK( 0 == strcmp( podSync.basename( pPath ), pBasename ));
 }
 
 int main( int argc, char *argv[] )
