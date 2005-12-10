@@ -190,13 +190,13 @@ int main( int argc, char *argv[] )
   if( true == parseOptions( argc, argv, &l_options ))
   {
     rInfo( "Options ok" );
+#if defined HAVE_RLOG
+    //! @todo Actually use the log file argument
     if( 0 != l_options.logFile )
     {      
-#if defined HAVE_RLOG
-      log.subscribeTo( RLOG_CHANNEL("") );
-#endif
     }
-    
+    log.subscribeTo( RLOG_CHANNEL("") );
+#endif
     if( true == createInvisibleWindow() )
     {
       rInfo( "createInvisibleWindow ok" );
