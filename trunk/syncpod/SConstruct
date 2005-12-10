@@ -12,7 +12,7 @@ opts.Add( 'nvwa', 'Set to 1 to try to use the "Stones of Nvwa" library', 0 )
 opts.Add( 'prefix', 'Set the installation prefix', '' )
 
 # Set up the env
-CPPFLAGS   = [ '-Wall' ]
+CPPFLAGS   = [ '-Wall', '-pedantic', '-ansi' ]
 CPPDEFINES = []
 LIBS       = []
 SConsignFile( '.syncpod_sign' )
