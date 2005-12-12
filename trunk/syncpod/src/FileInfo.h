@@ -52,11 +52,19 @@ class FileInfo
    */  
   bool  getInfo( const char *pName );
  private:
+  /** Holds file name*/
   char *m_pName;
+  /** Holds access time in seconds from the epoch for this file/directory*/
   int   m_accessTime;
+  /** Holds modification time in seconds from the epoch for this file/directory*/
   int   m_modificationTime;
+  /** Holds modificationcreation time in seconds from the epoch for this file/directory*/
   int   m_creationTime;
+  /** Is this a directory or a file*/
   bool  m_isDir;
+  /**
+   * @brief Free memory allocated to store file name
+   */
   void  reset();
 };
 

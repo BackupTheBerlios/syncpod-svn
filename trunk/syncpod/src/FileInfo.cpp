@@ -36,7 +36,6 @@ void FileInfo::reset()
   {
     delete[] m_pName;
   }
-//   memset( this, 0, sizeof( this ));
 }
 
 bool FileInfo::getInfo( const char *pName )

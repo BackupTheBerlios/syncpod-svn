@@ -36,12 +36,29 @@ class ConfigFile
    * taken into account by nvwa.
    * @param pStr [in] string to duplicate
    * @return pointer to copy of string, 0 if no more memory
-   * @important remember to delete[] the returned value
+   * @warning remember to delete[] the returned value
    */
   char *dupStr( const char *pStr );
  public:
+  /**
+   * @brief Default constructor
+   * 
+   * Construct a config file object with default initial values.
+   */
   ConfigFile();
+  /**
+   * @brief Constructor with an associated file on disk
+   * 
+   * Construct a config file object and attempts to initialise the object
+   * with values from the given file.
+   * @param pFile [in] file to process to initialise config object
+   */
   ConfigFile( const char *pFile );
+  /**
+   * @brief Destructor
+   *
+   * Destroy config file object, freeing any allocated memory.
+   */
   ~ConfigFile();
   /**
    * @brief Retrieve the data associated with the given key.

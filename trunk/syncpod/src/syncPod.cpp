@@ -19,11 +19,25 @@ using namespace rlog;
 
 #include "PodSync.h"
 
+/**
+ * @brief Syncpod options class
+ *
+ * Defines options that can be set on the command line.
+ */
 class SyncPodOptions
 {
 public:
+  /**
+   * Log file path as specified on the command line.
+   */
   const char *logFile;
+  /**
+   * Config file to use as specified on the command line.
+   */  
   const char *configFile;
+  /**
+   * @brief Initialise the members to 0.
+   */
   SyncPodOptions();
 };
 
