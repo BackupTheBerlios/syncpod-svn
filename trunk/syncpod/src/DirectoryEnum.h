@@ -16,7 +16,17 @@
 class DirectoryEnum
 {
  public:
+  /**
+   * @brief Default constructor
+   *
+   * Construct a directory enumeration object.
+   */
   DirectoryEnum();
+  /**
+   * @brief Destructor
+   *
+   * Destroy a directory enumeration object, freeing any allocating memory.
+   */  
   ~DirectoryEnum();
   /**
    * @brief Find the first entry of the given path.
@@ -37,10 +47,18 @@ class DirectoryEnum
    */
   FileInfo *findNext( void );
  private:
-  DIR  *m_dirHnd;
+  /** OS handle to directory */
+  DIR  *m_dirHnd; 
+  /** Initial path of this enumeration object */
   char *m_pPath;
+  /** Holds current enumerated item informtion */
   FileInfo m_curEnt;
-  FileInfo m_curInfo;
+  /**
+   * @brief Reset state information of this object.
+   *
+   * This method will be called in the findFirst method to
+   * clear any previous enumeration information.
+   */
   void reset( void );
 };
 
