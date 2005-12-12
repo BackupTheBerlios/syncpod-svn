@@ -14,6 +14,6 @@ env.Library( 'synPod-utils',
 binary = env.Program( "syncPod",
                       [ "syncPod.cpp" ],
                       LIBPATH = [ '.' ],
-                      LIBS = ['synPod-utils'] + env['LIBS'],
-                      LINKFLAGS = ['-mwindows'] )
+                      LIBS = ['synPod-utils'] + env['LIBS'] )
+
 Return( "directory", "binary", "library", "headers" )
