@@ -23,6 +23,11 @@ class ConfigFile;
  *
  * @section development Development
  *
+ * syncpod is developped using Emacs, mingw on Windows XP.
+ * The code is compiled with several falvours of GCC (mingw and cygwin) using the '-ansi'
+ * parameter.
+ * The free Borland compiler is also used regularly to build syncpod.
+ *
  * @section dependencies Dependencies
  *
  * @section installation Installation
@@ -86,7 +91,7 @@ class PodSync
    */
   bool copy( const char *pSrc, const char *pDst );
   /**
-   * @brief Create a directory.
+   * @brief Create a path.
    * 
    * Creates a directory. The missing component of the path will be created.
    * @param pPath [in] path name to create
@@ -108,10 +113,36 @@ class PodSync
    * @return right most component of the given path.
    */  
   const char *basename( const char *pPath );
+  /**
+   * @brief Create a directory.
+   * 
+   * Creates one directory. Helper method for makeDirs.
+   * @sa makeDirs
+   * @param pPath [in] path name to create
+   * @return true if the creation was successful.
+   */  
+  bool makeDir(  const char *pPath );
  public:
+  /**
+   * @brief Default constructor
+   */
   PodSync();
+  /**
+   * @brief Destructor
+   */
   ~PodSync();
+  /**
+   * @brief Perform synchronization.
+   *
+   * Call this method to perform synchronization according to the current
+   * configuration.
+   */
   void doSync( void );
+  /**
+   * @brief Call this method when a USB mass storage device is inserted
+   *
+   * @param drive [in] Windows drive letter of the inserted drive
+   */
   void OnDriveInserted( char drive );
 };
 

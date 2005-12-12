@@ -59,6 +59,28 @@ const char *PodSync::basename( const char *pPath )
   return pBasename;
 }
 
+bool PodSync::makeDir( const char *pPath )
+{
+#if defined __MINGW32__ || defined __BORLANDC__
+  if( 0 != mkdir( pPath ))
+#else
+  if( 0 != mkdir( pPath, 0700 ))
+#endif
+  {
+#if defined __BORLANDC__
+    // Borland returns EACCES if the dir exists...
+    if( EACCES != errno && EEXIST != errno )
+#else
+    if( EEXIST != errno )
+#endif
+    {
+      rWarning( "Unknown error while mkdir: %s (errno = %d)", pPath, errno );
+      return false;
+    }
+  }
+  return true;
+}
+
 bool PodSync::copy( const char *pSrc, const char *pDst )
 {
   FILE *dst;
@@ -124,6 +146,7 @@ bool PodSync::processOneItem( FileInfo *pSrcInfo, FileInfo *pDstInfo )
     }
     else
     {
+      // Current item in src is a dir, recurse
       const char *srcBaseName = basename( pSrcInfo->getName() );
       char *pNewDst = new char[ strlen( pDstInfo->getName() ) + strlen( srcBaseName ) + 2 ];
       strcpy( pNewDst, pDstInfo->getName() );
@@ -179,23 +202,10 @@ bool PodSync::makeDirs( const char *pPath )
     if( 0 != *pIndex )
     {
       *pIndex = 0;
-#if defined __MINGW32__ || defined __BORLANDC__
-      if( 0 != mkdir( pStart ))
-#else
-      if( 0 != mkdir( pStart, 0700 ))
-#endif
+      if( false == makeDir( pStart ))
       {
-#if defined __BORLANDC__
-        // Borland returns EACCES if the dir exists...
-        if( EACCES != errno && EEXIST != errno )
-#else
-        if( EEXIST != errno )
-#endif
-        {
-          rWarning( "Unknown error while mkdir: %s (errno = %d)", pStart, errno );
-          delete[] pStart;
-          return false;
-        }
+        delete[] pStart;
+        return false;
       }
       *pIndex = '/';
       pIndex++;
@@ -204,23 +214,10 @@ bool PodSync::makeDirs( const char *pPath )
   // The +1 here takes care of attempting to mkdir '/' (which fails)
   if( pIndex != pStart && pIndex != ( pStart + 1 ))
   {
-#if defined __MINGW32__ || defined __BORLANDC__
-      if( 0 != mkdir( pStart ))
-#else
-      if( 0 != mkdir( pStart, 0700 ))
-#endif
+    if( false == makeDir( pStart ))
     {
-#if defined __BORLANDC__
-      // Borland returns EACCES if the dir exists...
-      if( EACCES != errno && EEXIST != errno )
-#else
-      if( EEXIST != errno )
-#endif
-      {
-        rWarning( "Unknow error while mkdir: %s", pStart );
-        delete[] pStart;
-        return false;
-      }
+      delete[] pStart;
+      return false;
     }
   }
   delete[] pStart;
@@ -320,3 +317,4 @@ void PodSync::OnDriveInserted( char drive )
   rInfo( "Media detected %c", drive );
   doSync();
 }
+
