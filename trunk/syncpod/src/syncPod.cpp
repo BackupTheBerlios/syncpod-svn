@@ -4,7 +4,9 @@
 #include <windows.h>
 #include <dbt.h>
 #include <stdio.h>
+#if !defined __BORLANDC__
 #include <getopt.h>
+#endif
 
 #if defined HAVE_RLOG
 #include <rlog/rlog.h>
@@ -44,7 +46,7 @@ static char driveFromMask( ULONG unitmask )
     unitmask = unitmask >> 1;
   }
 
-  return (i + 'A');
+  return (char)(i + 'A');
 }
 
 static LRESULT CALLBACK WndProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
@@ -96,6 +98,7 @@ static void usage( void )
   printf( "See the file copying.txt for copying permission.\n" );
 }
 
+#if !defined __BORLANDC__
 static bool parseOptions( int argc, char *argv[], SyncPodOptions *options )
 {
   int c;
@@ -135,6 +138,7 @@ static bool parseOptions( int argc, char *argv[], SyncPodOptions *options )
   }   
   return result;
 }
+#endif
 
 static bool createInvisibleWindow( void )
 {
@@ -187,6 +191,7 @@ int main( int argc, char *argv[] )
   StdioNode log;
 #endif
   SyncPodOptions l_options;
+#if !defined __BORLANDC__
   if( true == parseOptions( argc, argv, &l_options ))
   {
     rInfo( "Options ok" );
@@ -196,6 +201,7 @@ int main( int argc, char *argv[] )
     {      
     }
     log.subscribeTo( RLOG_CHANNEL("") );
+#endif
 #endif
     if( true == createInvisibleWindow() )
     {
@@ -208,7 +214,8 @@ int main( int argc, char *argv[] )
         DispatchMessage( &Msg );
       }
     }
+#if !defined __BORLANDC__
   }
-    
+#endif    
   return 0;
 }

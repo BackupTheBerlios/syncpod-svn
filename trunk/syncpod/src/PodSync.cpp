@@ -11,7 +11,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#if defined __CYGWIN32__
+// Mess to get mkdir's prototype
+#if defined __MINGW32__
+// Mingw defines it here
+#include <io.h>
+#elif defined __BORLANDC__
+// Borland defines it here
+#include <dir.h>
+#else
+// Posix defines it here
 #include <sys/stat.h>
 #endif
 
@@ -171,15 +179,20 @@ bool PodSync::makeDirs( const char *pPath )
     if( 0 != *pIndex )
     {
       *pIndex = 0;
-#if defined __CYGWIN32__
-      if( 0 != mkdir( pStart, 0700 ))
-#else
+#if defined __MINGW32__ || defined __BORLANDC__
       if( 0 != mkdir( pStart ))
+#else
+      if( 0 != mkdir( pStart, 0700 ))
 #endif
       {
+#if defined __BORLANDC__
+        // Borland returns EACCES if the dir exists...
+        if( EACCES != errno && EEXIST != errno )
+#else
         if( EEXIST != errno )
+#endif
         {
-          rWarning( "Unknown error while mkdir: %s", pStart );
+          rWarning( "Unknown error while mkdir: %s (errno = %d)", pStart, errno );
           delete[] pStart;
           return false;
         }
@@ -191,13 +204,18 @@ bool PodSync::makeDirs( const char *pPath )
   // The +1 here takes care of attempting to mkdir '/' (which fails)
   if( pIndex != pStart && pIndex != ( pStart + 1 ))
   {
-#if defined __CYGWIN32__
-      if( 0 != mkdir( pStart, 0700 ))
-#else
+#if defined __MINGW32__ || defined __BORLANDC__
       if( 0 != mkdir( pStart ))
+#else
+      if( 0 != mkdir( pStart, 0700 ))
 #endif
     {
+#if defined __BORLANDC__
+      // Borland returns EACCES if the dir exists...
+      if( EACCES != errno && EEXIST != errno )
+#else
       if( EEXIST != errno )
+#endif
       {
         rWarning( "Unknow error while mkdir: %s", pStart );
         delete[] pStart;
@@ -254,8 +272,8 @@ bool PodSync::performSync( const char *pSrc, const char *pDst )
   {
     rInfo( "Enumerating %s", srcInfo.getName() );
     // Skip . and ..
-    pSrcInfo = srcEnumerator.findFirst( pSrc );
-    pSrcInfo = srcEnumerator.findNext();
+    srcEnumerator.findFirst( pSrc );
+    srcEnumerator.findNext();
     pSrcInfo = srcEnumerator.findNext();
     while( 0 != pSrcInfo )
     {
