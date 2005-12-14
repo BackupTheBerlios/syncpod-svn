@@ -4,9 +4,7 @@
 #include <windows.h>
 #include <dbt.h>
 #include <stdio.h>
-#if !defined __BORLANDC__
 #include <getopt.h>
-#endif
 
 #if defined HAVE_RLOG
 #include <rlog/rlog.h>
@@ -112,25 +110,13 @@ static void usage( void )
   printf( "See the file copying.txt for copying permission.\n" );
 }
 
-#if !defined __BORLANDC__
 static bool parseOptions( int argc, char *argv[], SyncPodOptions *options )
 {
   int c;
   bool result = true;
   while (1)
-  {
-    static const struct option long_options[] =
-      {
-        {"config", required_argument, 0, 'c' },
-        {"log", required_argument, 0, 'l' },
-        {"help", no_argument, 0, 'h' },
-        {0, 0, 0, 0}
-      };
-    /* getopt_long stores the option index here. */
-    int option_index = 0;
-     
-    c = getopt_long( argc, argv, "c:l:h", long_options, &option_index );
-     
+  {  
+    c = getopt( argc, argv, "c:l:h" );
     /* Detect the end of the options. */
     if( c == -1 )
       break;
@@ -152,7 +138,6 @@ static bool parseOptions( int argc, char *argv[], SyncPodOptions *options )
   }   
   return result;
 }
-#endif
 
 static bool createInvisibleWindow( void )
 {
@@ -205,17 +190,15 @@ int main( int argc, char *argv[] )
   StdioNode log;
 #endif
   SyncPodOptions l_options;
-#if !defined __BORLANDC__
   if( true == parseOptions( argc, argv, &l_options ))
   {
     rInfo( "Options ok" );
 #if defined HAVE_RLOG
-    //! @todo Actually use the log file argument
+    /** @todo Actually use the log file argument */
     if( 0 != l_options.logFile )
     {      
     }
     log.subscribeTo( RLOG_CHANNEL("") );
-#endif
 #endif
     if( true == createInvisibleWindow() )
     {
@@ -228,8 +211,6 @@ int main( int argc, char *argv[] )
         DispatchMessage( &Msg );
       }
     }
-#if !defined __BORLANDC__
   }
-#endif    
   return 0;
 }
