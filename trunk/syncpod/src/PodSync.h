@@ -79,7 +79,6 @@ class PodSync
    * @param pSrc [in] path to synch from
    * @param pDst [in] path to sync to
    * @return true if sync sucessful
-   * @todo Make performSync recurse through pSrc
    * @todo Make performSync return value less Manichean
    */
   bool performSync( const char *pSrc, const char *pDst );
