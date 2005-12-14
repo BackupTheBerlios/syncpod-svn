@@ -18,12 +18,10 @@ def JBL_GenerateEnv( project, opts = None, ansi = False ):
     if opts is None:
         opts = Options()
     # Adds some standard options
-    opts.Add( 'prefix', 'Set the installation prefix', defaultInstallPrefix )
     opts.Add( 'debug', 'Set to 1 to build with debug symbols', 0 )
     opts.Add( EnumOption('compiler', 'Attempt to build using the given compiler', defaultCompiler, allowed_values = ( 'mingw', 'cygwin', 'bcc32' ) ))
     # Dummy environment to get the options
     env = SCons.Environment.Environment( options = opts, tools = [] )
-    env.SConsignFile( project + '_sign' )
     # Set up the env
     if env['compiler'] == 'mingw':
         tools = [ 'mingw' ]
@@ -34,10 +32,12 @@ def JBL_GenerateEnv( project, opts = None, ansi = False ):
     elif env['compiler'] == 'bcc32':
         tools = ['bcc32', 'tlib', 'ilink32']
         compilerType = 'borland'
-
+        defaultInstallPrefix = 'c:/bcc55'
     # Now creates the environment with the correct tools
-    env = env.Copy( tools = tools, options = opts )
+    opts.Add( 'prefix', 'Set the installation prefix', defaultInstallPrefix )
+    env = SCons.Environment.Environment( tools = tools, options = opts )
     env.Help(opts.GenerateHelpText(env))
+    env.SConsignFile( project + '_sign' )
     # Set up the compiler options according to the compiler type/platform
     if compilerType == 'gcc':
         env.Append( CPPFLAGS = [ '-Wall', '-pedantic' ] )
