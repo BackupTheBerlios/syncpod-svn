@@ -37,6 +37,9 @@ if int( env['nvwa'] ) == 1:
         print "Warning: nvwa is not available, compiling without it!"
 conf.Finish()
 
+if env['compiler'] == 'bcc32':
+    LIBS.append( 'getopt' )
+
 # Update the environment with the config options
 env.Append( CPPDEFINES = CPPDEFINES )
 env.Append( LIBS = LIBS )
