@@ -200,6 +200,14 @@ int main( int argc, char *argv[] )
     }
     log.subscribeTo( RLOG_CHANNEL("") );
 #endif
+    if( 0 != l_options.configFile )
+    {
+      g_app.setConfig( l_options.configFile );
+    }
+    else
+    {
+      g_app.setConfig( "syncpod.cfg" );
+    }
     if( true == createInvisibleWindow() )
     {
       rInfo( "createInvisibleWindow ok" );

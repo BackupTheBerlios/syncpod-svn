@@ -32,11 +32,11 @@
 
 PodSync::PodSync()
 {
-  m_pConfig = new ConfigFile( "syncPod.cfg" );
+  m_pConfig = 0;
 }
 
 PodSync::~PodSync()
-{
+{  
   delete m_pConfig;
 }
 
@@ -318,3 +318,11 @@ void PodSync::OnDriveInserted( char drive )
   doSync();
 }
 
+void PodSync::setConfig( const char *pConfig )
+{
+  if( 0 != m_pConfig )
+  {
+    delete m_pConfig;
+  }
+  m_pConfig = new ConfigFile( pConfig );
+}

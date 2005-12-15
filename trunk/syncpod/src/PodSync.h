@@ -143,6 +143,14 @@ class PodSync
    * @param drive [in] Windows drive letter of the inserted drive
    */
   void OnDriveInserted( char drive );
+  /**
+   * @brief Set the config file to use
+   *
+   * Set the config file to use. This will reload the configuration.
+   *
+   * @param pConfig [in] path to the config file name.
+   */
+  void setConfig( const char *pConfig );
 };
 
 #endif // PODSYNC_H
