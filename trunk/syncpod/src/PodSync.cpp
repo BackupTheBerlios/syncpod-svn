@@ -289,8 +289,9 @@ bool PodSync::performSync( const char *pSrc, const char *pDst )
   return result;
 }
 
-void PodSync::doSync( void )
+bool PodSync::doSync( void )
 {
+  bool result = true;
   const char *pDst = m_pConfig->getString( "destination_directory" );
   const char *pSrc = m_pConfig->getString( "source_directory" );
   if( 0 != pDst && 0 != pSrc )
@@ -308,14 +309,16 @@ void PodSync::doSync( void )
   else
   {
     rWarning( "Bad config" );
+    result = false;
   }
+  return result;
 }
 
 
-void PodSync::OnDriveInserted( char drive )
+bool PodSync::OnDriveInserted( char drive )
 {
   rInfo( "Media detected %c", drive );
-  doSync();
+  return doSync();
 }
 
 void PodSync::setConfig( const char *pConfig )

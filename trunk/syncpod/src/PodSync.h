@@ -135,14 +135,17 @@ class PodSync
    *
    * Call this method to perform synchronization according to the current
    * configuration.
+   *
+   * @return true if synchonization succeeded, false otherwise.
    */
-  void doSync( void );
+  bool doSync( void );
   /**
    * @brief Call this method when a USB mass storage device is inserted
    *
    * @param drive [in] Windows drive letter of the inserted drive
+   * @return true if synchonization succeeded, false otherwise.
    */
-  void OnDriveInserted( char drive );
+  bool OnDriveInserted( char drive );
   /**
    * @brief Set the config file to use
    *

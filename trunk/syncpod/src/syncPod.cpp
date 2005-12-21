@@ -54,6 +54,7 @@ SyncPodOptions::SyncPodOptions()
 }
 
 static PodSync g_app;
+static int     g_appResult = 0;
 
 static char driveFromMask( ULONG unitmask )
 {
@@ -88,7 +89,12 @@ static LRESULT CALLBACK WndProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
       if (lpdb -> dbch_devicetype == DBT_DEVTYP_VOLUME)
       {
         PDEV_BROADCAST_VOLUME lpdbv = (PDEV_BROADCAST_VOLUME)lpdb;
-        g_app.OnDriveInserted( driveFromMask( lpdbv ->dbcv_unitmask ));
+        if( false == g_app.OnDriveInserted( driveFromMask( lpdbv ->dbcv_unitmask )))
+        {
+          rError( "Problem during synchronization, see logs" );
+          g_appResult = 1;
+          PostQuitMessage( g_appResult );
+        }
       }
     }
     break;
@@ -250,7 +256,12 @@ int main( int argc, char *argv[] )
     {
       rInfo( "createInvisibleWindow ok" );
       MSG Msg;
-      g_app.doSync();
+      if( false == g_app.doSync() )
+      {
+        rError( "Problem during synchronization, see logs" );
+        g_appResult = 1;
+        PostQuitMessage( g_appResult );
+      }
       while( GetMessage( &Msg, NULL, 0, 0 ) > 0 )
       {
         TranslateMessage( &Msg );
@@ -265,5 +276,5 @@ int main( int argc, char *argv[] )
   }
   delete log;
 #endif
-  return 0;
+  return g_appResult;
 }
