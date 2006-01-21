@@ -1,11 +1,15 @@
 // Copyright (c)2005 Jean-Baptiste Lab (jean-baptiste dot lab at laposte dot net)
 // See the file copying.txt for copying permission.
 
+#if defined WIN32
 #include <windows.h>
 #include <dbt.h>
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
 #include <stdio.h>
 #include <getopt.h>
-#include <io.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 
@@ -56,6 +60,7 @@ SyncPodOptions::SyncPodOptions()
 static PodSync g_app;
 static int     g_appResult = 0;
 
+#if defined WIN32
 static char driveFromMask( ULONG unitmask )
 {
   char i;
@@ -108,6 +113,53 @@ static LRESULT CALLBACK WndProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
   return 0;
 }
 
+static bool createInvisibleWindow( void )
+{
+  WNDCLASSEX wc;
+  HWND hwnd;
+  const char g_szClassName[] = "myWindowClass";
+  wc.cbSize        = sizeof( WNDCLASSEX );
+  wc.style         = 0;
+  wc.lpfnWndProc   = WndProc;
+  wc.cbClsExtra    = 0;
+  wc.cbWndExtra    = 0;
+  wc.hInstance     = 0;
+  wc.hIcon         = LoadIcon( NULL, IDI_APPLICATION );
+  wc.hCursor       = LoadCursor( NULL, IDC_ARROW );
+  wc.hbrBackground = (HBRUSH)( COLOR_WINDOW+1 );
+  wc.lpszMenuName  = NULL;
+  wc.lpszClassName = g_szClassName;
+  wc.hIconSm       = LoadIcon( NULL, IDI_APPLICATION );
+
+  if(!RegisterClassEx(&wc))
+  {
+    MessageBox( NULL, 
+                "Window Registration Failed!",
+                "Error!",
+                MB_ICONEXCLAMATION | MB_OK );
+    return false;
+  }
+
+  hwnd = CreateWindowEx( WS_EX_CLIENTEDGE,
+                         g_szClassName,
+                         "The title of my window",
+                         WS_OVERLAPPEDWINDOW,
+                         CW_USEDEFAULT, CW_USEDEFAULT, 240, 120,
+                         NULL, NULL, 0, NULL );
+
+  if( NULL == hwnd )
+  {
+    MessageBox( NULL, 
+                "Window Creation Failed!",
+                "Error!",
+                MB_ICONEXCLAMATION | MB_OK );
+    return false;
+  }
+  return true;
+}
+
+#endif
+
 static void usage( void )
 {
   printf( "Usage: syncPod [OPTIONS]\n" );
@@ -155,51 +207,6 @@ static bool parseOptions( int argc, char *argv[], SyncPodOptions *options )
     }
   }   
   return result;
-}
-
-static bool createInvisibleWindow( void )
-{
-  WNDCLASSEX wc;
-  HWND hwnd;
-  const char g_szClassName[] = "myWindowClass";
-  wc.cbSize        = sizeof( WNDCLASSEX );
-  wc.style         = 0;
-  wc.lpfnWndProc   = WndProc;
-  wc.cbClsExtra    = 0;
-  wc.cbWndExtra    = 0;
-  wc.hInstance     = 0;
-  wc.hIcon         = LoadIcon( NULL, IDI_APPLICATION );
-  wc.hCursor       = LoadCursor( NULL, IDC_ARROW );
-  wc.hbrBackground = (HBRUSH)( COLOR_WINDOW+1 );
-  wc.lpszMenuName  = NULL;
-  wc.lpszClassName = g_szClassName;
-  wc.hIconSm       = LoadIcon( NULL, IDI_APPLICATION );
-
-  if(!RegisterClassEx(&wc))
-  {
-    MessageBox( NULL, 
-                "Window Registration Failed!",
-                "Error!",
-                MB_ICONEXCLAMATION | MB_OK );
-    return false;
-  }
-
-  hwnd = CreateWindowEx( WS_EX_CLIENTEDGE,
-                         g_szClassName,
-                         "The title of my window",
-                         WS_OVERLAPPEDWINDOW,
-                         CW_USEDEFAULT, CW_USEDEFAULT, 240, 120,
-                         NULL, NULL, 0, NULL );
-
-  if( NULL == hwnd )
-  {
-    MessageBox( NULL, 
-                "Window Creation Failed!",
-                "Error!",
-                MB_ICONEXCLAMATION | MB_OK );
-    return false;
-  }
-  return true;
 }
 
 int main( int argc, char *argv[] )
@@ -252,6 +259,7 @@ int main( int argc, char *argv[] )
     {
       g_app.setConfig( "syncpod.cfg" );
     }
+#if defined WIN32
     if( true == createInvisibleWindow() )
     {
       rInfo( "createInvisibleWindow ok" );
@@ -268,6 +276,17 @@ int main( int argc, char *argv[] )
         DispatchMessage( &Msg );
       }
     }
+#else
+    while( 1 )
+    {
+      if( false == g_app.doSync() )
+      {
+        rError( "Problem during synchronization, see logs" );
+        g_appResult = 1;
+      }
+      sleep( 1 );
+    }
+#endif
   }
 #if defined HAVE_RLOG
   if( -1 != fd )

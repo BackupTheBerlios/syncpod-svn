@@ -10,7 +10,7 @@ env.Library( 'synPod-utils',
              [ 'ConfigFile.cpp',
                'DirectoryEnum.cpp',
                'FileInfo.cpp',
-               'Podsync.cpp' ] )
+               'PodSync.cpp' ] )
 binary = env.Program( "syncPod",
                       [ "syncPod.cpp" ],
                       LIBPATH = [ '.' ],

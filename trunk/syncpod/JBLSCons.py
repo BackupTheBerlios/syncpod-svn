@@ -3,7 +3,7 @@
 
 import sys
 from SCons import *
-from SCons.Script import Options
+from SCons.Options import Options
 from SCons.Options import EnumOption
 import SCons.Environment
 
@@ -15,11 +15,14 @@ def JBL_GenerateEnv( project, opts = None, ansi = False ):
     elif sys.platform == 'cygwin':
         defaultCompiler = 'cygwin'
         defaultInstallPrefix = '/usr'
+    elif sys.platform == 'linux' or sys.platform == 'linux2':
+        defaultCompiler = 'gcc'
+        defaultInstallPrefix = '/usr'
     if opts is None:
         opts = Options()
     # Adds some standard options
     opts.Add( 'debug', 'Set to 1 to build with debug symbols', 0 )
-    opts.Add( EnumOption('compiler', 'Attempt to build using the given compiler', defaultCompiler, allowed_values = ( 'mingw', 'cygwin', 'bcc32' ) ))
+    opts.Add( EnumOption('compiler', 'Attempt to build using the given compiler', defaultCompiler, allowed_values = ( 'mingw', 'cygwin', 'bcc32', 'gcc' ) ))
     # Dummy environment to get the options
     env = SCons.Environment.Environment( options = opts, tools = [] )
     # Set up the env
@@ -28,6 +31,9 @@ def JBL_GenerateEnv( project, opts = None, ansi = False ):
         compilerType = 'gcc'
     elif env['compiler'] == 'cygwin':
         tools = ['default']      
+        compilerType = 'gcc'
+    elif env['compiler'] == 'gcc':
+        tools = ['default']
         compilerType = 'gcc'
     elif env['compiler'] == 'bcc32':
         tools = ['bcc32', 'tlib', 'ilink32']
@@ -40,7 +46,7 @@ def JBL_GenerateEnv( project, opts = None, ansi = False ):
     env.SConsignFile( project + '_sign' )
     # Set up the compiler options according to the compiler type/platform
     if compilerType == 'gcc':
-        env.Append( CPPFLAGS = [ '-Wall', '-pedantic' ] )
+        env.Append( CPPFLAGS = [ '-W', '-Wall', '-pedantic' ] )
         if ansi is True:
             env.Append( CPPFLAGS = [ '-ansi' ] )
         # Only on Windows type platform
@@ -48,7 +54,6 @@ def JBL_GenerateEnv( project, opts = None, ansi = False ):
             env.Append( LINKFLAGS = ['-mwindows'] )
     elif compilerType == 'borland':
         env.Append( CPPFLAGS = ['-w', '-Q', '-DWIN32_LEAN_AND_MEAN'] )
-
     if int( env['debug'] ) == 1:
         if compilerType == 'gcc':
             env.Append( CPPFLAGS = [ '-g' ] )
