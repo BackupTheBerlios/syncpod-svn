@@ -2,15 +2,14 @@ Some sort of process (more a bullet list of things to do) when I develop syncpod
 ---------------------------------------------------------------------------------
 * UNIT TEST everything that can be unit tested.
 * Try to isolate changes i.e. don't change many things in one change set, try to do one thing, get it right and commit it.
-* Run the unit/regression test suite(s) BEFORE any commit. Currently, the regression test suite is a bit inexistant, but
-sanity checks can be run: run with memory leak detection, check that the synch process is successful.
+* Run the unit/regression test suite(s) BEFORE any commit. Currently, the regression test suite is a bit inexistant, but sanity checks can be run: run with memory leak detection, check that the sync process is successful.
 * Do not ignore warnings issued by the tools (gcc, doxygen, anything), rather fix them as soon as they appear.
 * Keep the documentation up-to-date, specially the publicly visible,. There's not that much anyway:)
 * Switch between mingw and cygwin regularly and make sure they are no differences.
 
 Misc. things:
 -------------
-To check that syncpod do not leak:
+To check that syncpod does not leak:
    scons rlog=0 nvwa=1
 as rlog leaks due to dynamic allocations in static object constructors (I think...).
 
