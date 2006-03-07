@@ -21,15 +21,15 @@ if int( env['tests'] ) == 1:
 # Auto configure things
 conf = env.Configure()
 if int( env['rlog'] ) == 1:
-    # Check for rLog availability (lib will be appended if detected)
-    if conf.CheckLib( 'rlog' ) is True:
+    # Check for rlog availability (lib will be appended if detected)
+    if conf.CheckLib( 'rlog' ) == 1:
         env.Append( CPPDEFINES = [ 'HAVE_RLOG' ] )
         env.Append( CPPDEFINES = [ 'RLOG_COMPONENT="syncPod"' ] )
     else:
-        print "Warning: rLog is not available, compiling without it!"
+        print "Warning: rlog is not available, compiling without it!"
 if int( env['nvwa'] ) == 1:
     # Check for nvwa availability, only if in debug  (lib will be appended if detected)
-    if conf.CheckLib( 'nvwa' ) is True:
+    if conf.CheckLib( 'nvwa' ) == 1:
         env.Append( CPPDEFINES = [ 'HAVE_NVWA' ] )
         if env['compiler'] == 'bcc32':
             env.Append( CPPDEFINES = [ 'NO_PLACEMENT_DELETE' ] )
