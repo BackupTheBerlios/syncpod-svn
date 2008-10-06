@@ -1,0 +1,15 @@
+Source: syncpod
+Section: unknown
+Priority: extra
+Maintainer: Jean-Baptiste Lab <jeanbaptiste.lab@gmail.com>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+Homepage: http://syncpod.berlios.de
+
+Package: syncpod
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: syncs PC contents with USB device
+ SyncPod is a small utility that will synchronize a directory on your
+ PC hard drive with a directory on a USB Mass Storage device (say an
+ MP3 player).
