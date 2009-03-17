@@ -62,7 +62,7 @@ TEST( DirectoryEnum, doubleFindFirst )
 TEST( FileInfo, getInfo )
 {
   FileInfo info;
-  CHECK( 0 != info.getInfo( "bld/test/direnum_test.exe" ));
+  CHECK( 0 != info.getInfo( "bld/test/direnum_test" ));
 }
 
 int main( int argc, char *argv[] )
