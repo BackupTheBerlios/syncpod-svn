@@ -71,7 +71,6 @@ FileInfo* DirectoryEnum::findNext( void )
       strcpy( dirAndFileName, m_pPath );
       strcat( dirAndFileName, "/" );
       strcat( dirAndFileName, pDirEnt->d_name );
-      rInfo( "Stating: %s", dirAndFileName );
       if( true == m_curEnt.getInfo( dirAndFileName ))
       {
         delete[] dirAndFileName;

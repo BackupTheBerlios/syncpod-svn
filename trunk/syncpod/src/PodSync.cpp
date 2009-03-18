@@ -74,7 +74,6 @@ bool PodSync::makeDir( const char *pPath )
     if( EEXIST != errno )
 #endif
     {
-      rWarning( "Unknown error while mkdir: %s (errno = %d)", pPath, errno );
       return false;
     }
   }

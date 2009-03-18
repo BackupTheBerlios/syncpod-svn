@@ -54,7 +54,6 @@ bool FileInfo::getInfo( const char *pName )
   }
   else
   {
-    rWarning( "stat failed: %s", pName );
     return false;
   }
 }
