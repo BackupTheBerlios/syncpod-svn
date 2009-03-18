@@ -7,25 +7,26 @@ test = env.Program( 'configFile_test',
                     CPPPATH = [ '#' ],
                     LIBPATH = [ '#bld/src' ],
                     LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
-env.AddPostAction( test, str(test[0].abspath ))
+test_alias = Alias('test', [test], test[0].abspath)
 
 test = env.Program( 'direnum_test',
                     [ 'direnum_test.cpp' ],
                     CPPPATH = [ '#' ],
                     LIBPATH = [ '#bld/src' ],
                     LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
-env.AddPostAction( test, str(test[0].abspath ))
+test_alias = Alias('test', [test], test[0].abspath)
 
 test = env.Program( 'podsync_test',
                     [ 'podsync_test.cpp' ],
                     CPPPATH = [ '#' ],
                     LIBPATH = [ '#bld/src' ],
                     LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
-env.AddPostAction( test, str(test[0].abspath ))
+test_alias = Alias('test', [test], test[0].abspath)
 
 test = env.Program( 'fileinfo_test',
                     [ 'fileinfo_test.cpp' ],
                     CPPPATH = [ '#' ],
                     LIBPATH = [ '#bld/src' ],
                     LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
-env.AddPostAction( test, str(test[0].abspath ))
+
+test_alias = Alias('test', [test], test[0].abspath)
