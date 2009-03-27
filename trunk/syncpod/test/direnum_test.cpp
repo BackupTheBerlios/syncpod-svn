@@ -4,7 +4,7 @@
 #include <cppunitlite/Test.h>
 #include <cppunitlite/TestResult.h>
 #include <cppunitlite/TestRegistry.h>
-
+#include <stdio.h>
 #include "src/DirectoryEnum.h"
 
 TEST( DirectoryEnum, findFirst )
