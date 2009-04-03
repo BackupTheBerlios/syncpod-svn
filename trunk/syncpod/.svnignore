@@ -5,6 +5,4 @@ syncpod_sign.dblite
 build-stamp
 configure-stamp
 syncpod.1
-docs/syncpod.xml
-debian/syncpod*
 
