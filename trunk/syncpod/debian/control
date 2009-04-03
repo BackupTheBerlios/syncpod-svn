@@ -1,5 +1,5 @@
 Source: syncpod
-Section: unknown
+Section: Utils
 Priority: extra
 Maintainer: Jean-Baptiste Lab <jeanbaptiste.lab@gmail.com>
 Build-Depends: debhelper (>= 5)
