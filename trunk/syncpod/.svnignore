@@ -2,4 +2,8 @@ config.log
 bld
 syncpod_sign.dblite
 .sconf_temp
-
+build-stamp
+configure-stamp
+syncpod.1
+debian/syncpod
+docs/syncpod.xmlx
