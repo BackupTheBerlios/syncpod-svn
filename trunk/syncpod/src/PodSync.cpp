@@ -185,13 +185,6 @@ bool PodSync::makeDirs( const char *pPath )
   char *pStart = pIndex;
   memcpy( pIndex, pPath, strlen( pPath ) + 1 );
 
-#if defined _WIN32
-  if( ':'  == pIndex[1] &&
-      IS_SLASH( pIndex[2] ))
-  {
-    pIndex += 3;
-  }
-#endif
   while ( 0 != *pIndex )
   {
     while( 0 != *pIndex && !IS_SLASH( *pIndex ))

@@ -8,7 +8,7 @@
 Platforms:
 ==========
 
-This software was developped on Windows XP, using the mingw compiler and the msys shell suite, see http://www.mingw.org/.
+This software was developped on Linux using GCC
 
 Installation instructions:
 ==========================
@@ -23,7 +23,7 @@ Dependencies:
 Decompress the archive, cd into the resulting directory and at a command prompt:
 prompt> scons
 
-This will build syncPod.exe in the bld/src directory.
+This will build the syncPod executable in the bld/src directory.
 
 prompt> scons -h
 

@@ -33,7 +33,7 @@ I plug my player to my computer ;)
 Usage:
 ======
 
-prompt>syncPod.exe
+prompt>syncPod
 
 Author and contact:
 ===================

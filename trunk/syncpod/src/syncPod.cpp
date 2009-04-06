@@ -1,13 +1,7 @@
 // Copyright (c)2005 Jean-Baptiste Lab (jean-baptiste dot lab at laposte dot net)
 // See the file copying.txt for copying permission.
 
-#if defined WIN32
-#include <windows.h>
-#include <dbt.h>
-#include <io.h>
-#else
 #include <unistd.h>
-#endif
 #include <stdio.h>
 #include <getopt.h>
 #include <fcntl.h>
@@ -59,106 +53,6 @@ SyncPodOptions::SyncPodOptions()
 
 static PodSync g_app;
 static int     g_appResult = 0;
-
-#if defined WIN32
-static char driveFromMask( ULONG unitmask )
-{
-  char i;
-
-  for (i = 0; i < 26; ++i)
-  {
-    if (unitmask & 0x1)
-      break;
-    unitmask = unitmask >> 1;
-  }
-
-  return (char)(i + 'A');
-}
-
-static LRESULT CALLBACK WndProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
-{
-  switch( msg )
-  {
-  case WM_CLOSE:
-    DestroyWindow( hwnd );
-    break;
-  case WM_DESTROY:
-    PostQuitMessage( 0 );
-    break;
-  case WM_DEVICECHANGE:
-    switch( wParam )
-    {
-    case DBT_DEVICEARRIVAL:
-    {
-      PDEV_BROADCAST_HDR lpdb = (PDEV_BROADCAST_HDR)lParam;
-      if (lpdb -> dbch_devicetype == DBT_DEVTYP_VOLUME)
-      {
-        PDEV_BROADCAST_VOLUME lpdbv = (PDEV_BROADCAST_VOLUME)lpdb;
-        if( false == g_app.OnDriveInserted( driveFromMask( lpdbv ->dbcv_unitmask )))
-        {
-          rError( "Problem during synchronization, see logs" );
-          g_appResult = 1;
-          PostQuitMessage( g_appResult );
-        }
-      }
-    }
-    break;
-    default:
-      break;
-    }    
-    break;
-  default:
-    return DefWindowProc( hwnd, msg, wParam, lParam );
-  }
-  return 0;
-}
-
-static bool createInvisibleWindow( void )
-{
-  WNDCLASSEX wc;
-  HWND hwnd;
-  const char g_szClassName[] = "myWindowClass";
-  wc.cbSize        = sizeof( WNDCLASSEX );
-  wc.style         = 0;
-  wc.lpfnWndProc   = WndProc;
-  wc.cbClsExtra    = 0;
-  wc.cbWndExtra    = 0;
-  wc.hInstance     = 0;
-  wc.hIcon         = LoadIcon( NULL, IDI_APPLICATION );
-  wc.hCursor       = LoadCursor( NULL, IDC_ARROW );
-  wc.hbrBackground = (HBRUSH)( COLOR_WINDOW+1 );
-  wc.lpszMenuName  = NULL;
-  wc.lpszClassName = g_szClassName;
-  wc.hIconSm       = LoadIcon( NULL, IDI_APPLICATION );
-
-  if(!RegisterClassEx(&wc))
-  {
-    MessageBox( NULL, 
-                "Window Registration Failed!",
-                "Error!",
-                MB_ICONEXCLAMATION | MB_OK );
-    return false;
-  }
-
-  hwnd = CreateWindowEx( WS_EX_CLIENTEDGE,
-                         g_szClassName,
-                         "The title of my window",
-                         WS_OVERLAPPEDWINDOW,
-                         CW_USEDEFAULT, CW_USEDEFAULT, 240, 120,
-                         NULL, NULL, 0, NULL );
-
-  if( NULL == hwnd )
-  {
-    MessageBox( NULL, 
-                "Window Creation Failed!",
-                "Error!",
-                MB_ICONEXCLAMATION | MB_OK );
-    return false;
-  }
-  return true;
-}
-
-#endif
 
 static void usage( void )
 {
@@ -259,24 +153,6 @@ int main( int argc, char *argv[] )
     {
       g_app.setConfig( "syncpod.cfg" );
     }
-#if defined WIN32
-    if( true == createInvisibleWindow() )
-    {
-      rInfo( "createInvisibleWindow ok" );
-      MSG Msg;
-      if( false == g_app.doSync() )
-      {
-        rError( "Problem during synchronization, see logs" );
-        g_appResult = 1;
-        PostQuitMessage( g_appResult );
-      }
-      while( GetMessage( &Msg, NULL, 0, 0 ) > 0 )
-      {
-        TranslateMessage( &Msg );
-        DispatchMessage( &Msg );
-      }
-    }
-#else
     while( 1 )
     {
       if( false == g_app.doSync() )
@@ -286,7 +162,6 @@ int main( int argc, char *argv[] )
       }
       sleep( 1 );
     }
-#endif
   }
 #if defined HAVE_RLOG
   if( -1 != fd )

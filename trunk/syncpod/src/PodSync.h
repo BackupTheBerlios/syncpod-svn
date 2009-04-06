@@ -23,10 +23,7 @@ class ConfigFile;
  *
  * @section development Development
  *
- * syncpod is developped using Emacs, mingw on Windows XP.
- * The code is compiled with several falvours of GCC (mingw and cygwin) using the '-ansi'
- * parameter.
- * The free Borland compiler is also used regularly to build syncpod.
+ * syncpod is developped using Emacs, GCC on Linux.
  *
  * @section dependencies Dependencies
  *
