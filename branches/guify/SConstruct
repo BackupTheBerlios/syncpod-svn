@@ -1,0 +1,47 @@
+## Copyright (c)2005 Jean-Baptiste Lab (jean-baptiste dot lab at laposte dot net)
+## See the file copying.txt for copying permission.
+
+from os.path import join
+
+opts = Variables()
+opts.Add( 'rlog', 'Set to 1 to try to use the rLog library', 1 )
+opts.Add( 'nvwa', 'Set to 1 to try to use the "Stones of Nvwa" library', 0 )
+opts.Add( 'debug', 'Set to 1 to build with debug symbols', 0 )
+opts.Add( 'prefix', 'Set the installation prefix', '/usr' )
+env = Environment( variables = opts )
+
+# Auto configure things
+conf = env.Configure()
+if int( env['rlog'] ) == 1:
+    # Check for rlog availability (lib will be appended if detected)
+    if conf.CheckLib( 'rlog' ) == 1:
+        env.Append( CPPDEFINES = [ 'HAVE_RLOG' ] )
+        env.Append( CPPDEFINES = [ 'RLOG_COMPONENT="syncPod"' ] )
+    else:
+        print "Warning: rlog is not available, compiling without it!"
+if int( env['nvwa'] ) == 1:
+    # Check for nvwa availability, only if in debug  (lib will be appended if detected)
+    if conf.CheckLib( 'nvwa' ) == 1:
+        env.Append( CPPDEFINES = [ 'HAVE_NVWA' ] )
+    else:
+        print "Warning: nvwa is not available, compiling without it!"
+conf.Finish()
+
+env.Append( CPPFLAGS = [ '-W', '-Wall', '-pedantic' ] )
+
+if int( env['debug'] ) == 1:
+    env.Append( CPPFLAGS = [ '-g' ] )
+else:
+    env.Append( CPPFLAGS = [ '-O2' ] )
+
+SConscript( 'test/SConscript', build_dir = 'bld/test', exports = ['env'], duplicate = 0 )
+
+# Do it!
+directory, binary, library, headers = SConscript( 'src/SConscript', build_dir = 'bld/src', exports = ['env'], duplicate = 0 )
+
+# Install (not a default target)
+installPrefix = env['prefix']
+Install( join( installPrefix, 'lib' ), library )
+Install( join( installPrefix, 'include', directory ), headers )
+Install( join( installPrefix, 'bin' ), binary )
+Alias('install', installPrefix )
