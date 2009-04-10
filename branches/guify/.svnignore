@@ -1,6 +1,6 @@
 config.log
 bld
-syncpod_sign.dblite
+.sconsign.dblite
 .sconf_temp
 build-stamp
 configure-stamp
