@@ -27,7 +27,10 @@ if int( env['nvwa'] ) == 1:
         print "Warning: nvwa is not available, compiling without it!"
 conf.Finish()
 
-env.Append( CPPFLAGS = [ '-W', '-Wall', '-pedantic' ] )
+env.ParseConfig("pkg-config gtkmm-2.4 --cflags --libs")
+env.ParseConfig("pkg-config libnotifymm-1.0 --cflags --libs")
+
+env.Append( CPPFLAGS = [ '-W', '-Wall' ] )
 
 if int( env['debug'] ) == 1:
     env.Append( CPPFLAGS = [ '-g' ] )
