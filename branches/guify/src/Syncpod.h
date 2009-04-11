@@ -5,11 +5,14 @@
 
 #include <gtkmm.h>
 
+#include "TrayIcon.h"
+#include "I_TrayObserver.h"
+
 namespace GnomeSyncpod
 {
-  class Syncpod : public Gtk::Window 
+  class Syncpod : public Gtk::Window, public I_TrayObserver
   {
-    Glib::RefPtr<Gtk::StatusIcon>  m_refStatusIcon;
+    TrayIcon m_statusIcon;
     Glib::RefPtr<Gtk::UIManager>   m_refUIManager;
     std::pair<int, int>  window_position;
 
@@ -23,6 +26,7 @@ namespace GnomeSyncpod
     virtual ~Syncpod();
     bool showAtStartup();
     bool minimizeToTray();
+    virtual void on_menuitem_selected(const Glib::ustring& item_name);
   };
 }
 

@@ -5,16 +5,16 @@
 using namespace GnomeSyncpod;
 
 Syncpod::Syncpod() : 
-  m_showAtStartup(true),
+  m_showAtStartup(false),
   m_minimizeToTray(true)
 {
   set_title("Gtk::StatusIcon example");
   set_border_width(5);
   set_default_size(100,100);
 
-  m_refStatusIcon = Gtk::StatusIcon::create(Gtk::Stock::HOME);
-  m_refStatusIcon->set_tooltip("gtkmm StatusIcon example tooltip");
-
+  m_statusIcon.set_tooltip("gnome-syncpod is idle");
+  m_statusIcon.set_observer(this);
+  
   if (m_minimizeToTray)
   {
     signal_hide().connect(sigc::mem_fun(this, &Syncpod::minimize));
@@ -24,27 +24,10 @@ Syncpod::Syncpod() :
     // As we do not use Gtk::Main::run(window)
     signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit));
   }
-
 }
 
 Syncpod::~Syncpod()
 {
-}
-
-bool Syncpod::showAtStartup()
-{
-  return m_showAtStartup;
-}
-
-bool Syncpod::minimizeToTray()
-{
-  return m_minimizeToTray;
-}
-
-void Syncpod::minimize()
-{
-  get_position(window_position.first, window_position.second);
-  get_window()->hide();  
 }
 
 void Syncpod::toggleVisible()
@@ -61,6 +44,26 @@ void Syncpod::toggleVisible()
   }
 }
 
+void Syncpod::minimize()
+{
+  get_position(window_position.first, window_position.second);
+  get_window()->hide();  
+}
+
+bool Syncpod::showAtStartup()
+{
+  return m_showAtStartup;
+}
+
+bool Syncpod::minimizeToTray()
+{
+  return m_minimizeToTray;
+}
+
+void Syncpod::on_menuitem_selected(const Glib::ustring& item_name)
+{
+}
+
 int main(int argc, char** argv)
 {
   Gtk::Main kit(argc, argv);
@@ -70,10 +73,6 @@ int main(int argc, char** argv)
   if(window.showAtStartup())
   {
     window.show();
-    kit.run();
   }
-  else
-  {
-    kit.run(window);
-  }
+  kit.run();
 }
