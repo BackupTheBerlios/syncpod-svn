@@ -144,7 +144,7 @@ void ExampleWindow::on_blink_clicked()
 
 // To close ExampleWindow you must click on Quit,
 // delete_event signal just hides it.
-bool ExampleWindow::on_delete_event(GdkEventAny* event)
+bool ExampleWindow::on_delete_event(GdkEventAny*)
 {
   toggle_hide();
   return true;

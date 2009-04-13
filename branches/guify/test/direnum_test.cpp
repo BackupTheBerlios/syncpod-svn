@@ -48,7 +48,7 @@ TEST( FileInfo, getInfo )
   CHECK( 0 != info.getInfo( "bld/test/direnum_test" ));
 }
 
-int main( int argc, char *argv[] )
+int main( int, char *[] )
 {
   TestResult result;
   TestRegistry::runAllTests( result );

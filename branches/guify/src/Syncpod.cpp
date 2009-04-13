@@ -9,7 +9,6 @@ Syncpod::Syncpod() :
   m_minimizeToTray(true)
 {
   set_title("Gnome Syncpod");
-  set_border_width(5);
   set_default_size(100,100);
 
   m_statusIcon.set_tooltip("gnome-syncpod is idle");
@@ -85,7 +84,7 @@ void Syncpod::toggle_visible()
 void Syncpod::minimize()
 {
   get_position(window_position.first, window_position.second);
-  get_window()->hide();  
+  hide();  
 }
 
 void Syncpod::on_action_file_new()
@@ -111,7 +110,7 @@ bool Syncpod::minimizeToTray()
   return m_minimizeToTray;
 }
 
-void Syncpod::on_trayicon_menuitem_selected(const Glib::ustring& item_name)
+void Syncpod::on_trayicon_menuitem_selected(const Glib::ustring&)
 {
   g_print("Called back!");
 }

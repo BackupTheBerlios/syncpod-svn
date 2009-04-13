@@ -64,7 +64,7 @@ TEST( ConfigFile, writeAppend )
   CHECK( true == cfg.write() );
 }
 
-int main( int argc, char *argv[] )
+int main( int, char *[] )
 {
   TestResult result;
   TestRegistry::runAllTests( result );
