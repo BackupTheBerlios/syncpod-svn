@@ -15,15 +15,16 @@ namespace GnomeSyncpod
   private:
     Glib::RefPtr<Gtk::StatusIcon>  m_refStatusIcon;
     Glib::RefPtr<Gtk::UIManager>   m_refUIManager;
-    const I_TrayObserver *m_pObserver;
+    I_TrayObserver *m_pObserver;
     
-    void  on_menuitem_selected (const Glib::ustring& item_name);
+    void on_menuitem_selected (const Glib::ustring& item_name);
+    void on_clicked();
   public:
     TrayIcon();
     virtual ~TrayIcon();
     void on_statusicon_popup(guint button, guint32 time);
     void set_tooltip(const Glib::ustring& tooltip_text);
-    void set_observer(const I_TrayObserver *observer);
+    void set_observer(I_TrayObserver *observer);
   };
 }
 

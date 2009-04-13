@@ -50,7 +50,8 @@ TrayIcon::TrayIcon() : m_pObserver(0)
 
   m_refStatusIcon->signal_popup_menu().connect(
     sigc::mem_fun(*this, &TrayIcon::on_statusicon_popup) );
-
+  m_refStatusIcon->signal_activate().connect(
+    sigc::mem_fun(*this, &TrayIcon::on_clicked) );
 }
 
 TrayIcon::~TrayIcon()
@@ -60,7 +61,13 @@ TrayIcon::~TrayIcon()
 void TrayIcon::on_menuitem_selected (const Glib::ustring& item_name)
 {
   if(m_pObserver)
-    m_pObserver->on_menuitem_selected(item_name);
+    m_pObserver->on_trayicon_menuitem_selected(item_name);
+}
+
+void TrayIcon::on_clicked()
+{
+  if(m_pObserver)
+    m_pObserver->on_trayicon_clicked();
 }
 
 void TrayIcon::on_statusicon_popup(guint button, guint32 time)
@@ -76,7 +83,7 @@ void TrayIcon::set_tooltip (const Glib::ustring& tooltip_text)
   m_refStatusIcon->set_tooltip(tooltip_text);
 }
 
-void TrayIcon::set_observer(const I_TrayObserver *observer)
+void TrayIcon::set_observer(I_TrayObserver *observer)
 {
   m_pObserver = observer;
 }

@@ -5,10 +5,10 @@
 using namespace GnomeSyncpod;
 
 Syncpod::Syncpod() : 
-  m_showAtStartup(false),
+  m_showAtStartup(true),
   m_minimizeToTray(true)
 {
-  set_title("Gtk::StatusIcon example");
+  set_title("Gnome Syncpod");
   set_border_width(5);
   set_default_size(100,100);
 
@@ -24,22 +24,60 @@ Syncpod::Syncpod() :
     // As we do not use Gtk::Main::run(window)
     signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit));
   }
+
+  Glib::RefPtr<Gtk::ActionGroup> refActionGroup = Gtk::ActionGroup::create();
+  refActionGroup->add( Gtk::Action::create("MenuFile", "_File") );
+  refActionGroup->add( Gtk::Action::create("New", Gtk::Stock::NEW),
+                       sigc::mem_fun(*this, &Syncpod::on_action_file_new) );
+  refActionGroup->add( Gtk::Action::create("Open", "Open file"),
+                       sigc::mem_fun(*this, &Syncpod::on_action_file_open) );
+  refActionGroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
+                         sigc::mem_fun(*this, &Syncpod::on_action_file_quit) );
+  Glib::RefPtr<Gtk::UIManager> m_refUIManager = Gtk::UIManager::create();
+  m_refUIManager->insert_action_group(refActionGroup);
+  add_accel_group(m_refUIManager->get_accel_group());
+
+  Glib::ustring ui_info =
+    "<ui>"
+    " <menubar name='MenuBar'>"
+    "    <menu action='MenuFile'>"
+    "      <menuitem action='New'/>"
+    "      <menuitem action='Open'/>"
+    "      <separator/>"
+    "      <menuitem action='Quit'/>"
+    "    </menu>"
+    " </menubar>"
+    " <toolbar name='ToolBar'>"
+    "   <toolitem action='Quit'/>"
+    " </toolbar>"
+    "</ui>";
+  m_refUIManager->add_ui_from_string(ui_info);
+
+  add(m_box);
+
+  Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
+  m_box.pack_start(*pMenubar, Gtk::PACK_SHRINK);
+
+  Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar") ;
+  m_box.pack_start(*pToolbar, Gtk::PACK_SHRINK);
+  
+  show_all_children();
 }
 
 Syncpod::~Syncpod()
 {
 }
 
-void Syncpod::toggleVisible()
+void Syncpod::toggle_visible()
 {
-  if(get_window()->is_visible()) 
+  if(is_visible()) 
   {
     get_position(window_position.first, window_position.second);
-    get_window()->hide();
+    hide();
   }
   else
   {
-    get_window()->show();
+    show();
     move(window_position.first, window_position.second);
   }
 }
@@ -48,6 +86,19 @@ void Syncpod::minimize()
 {
   get_position(window_position.first, window_position.second);
   get_window()->hide();  
+}
+
+void Syncpod::on_action_file_new()
+{
+}
+
+void Syncpod::on_action_file_open()
+{
+}
+
+void Syncpod::on_action_file_quit()
+{
+  Gtk::Main::quit();
 }
 
 bool Syncpod::showAtStartup()
@@ -60,8 +111,14 @@ bool Syncpod::minimizeToTray()
   return m_minimizeToTray;
 }
 
-void Syncpod::on_menuitem_selected(const Glib::ustring& item_name)
+void Syncpod::on_trayicon_menuitem_selected(const Glib::ustring& item_name)
 {
+  g_print("Called back!");
+}
+
+void Syncpod::on_trayicon_clicked()
+{
+  toggle_visible();
 }
 
 int main(int argc, char** argv)
