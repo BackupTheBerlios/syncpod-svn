@@ -11,17 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-// Mess to get mkdir's prototype
-#if defined __MINGW32__
-// Mingw defines it here
-#include <io.h>
-#elif defined __BORLANDC__
-// Borland defines it here
-#include <dir.h>
-#else
-// Posix defines it here
 #include <sys/stat.h>
-#endif
 
 #if defined HAVE_NVWA
 #include <nvwa/debug_new.h>
@@ -43,11 +33,6 @@ PodSync::~PodSync()
 const char *PodSync::basename( const char *pPath )
 {
   const char *pBasename = strrchr( pPath, '/' );
-  // Backslash maybe ?
-  if( 0 == pBasename )
-  {
-    pBasename = strrchr( pPath, '\\' );
-  }
   if( 0 != pBasename )
   {
     pBasename++;
@@ -61,18 +46,9 @@ const char *PodSync::basename( const char *pPath )
 
 bool PodSync::makeDir( const char *pPath )
 {
-#if defined __MINGW32__ || defined __BORLANDC__
-  if( 0 != mkdir( pPath ))
-#else
   if( 0 != mkdir( pPath, 0700 ))
-#endif
   {
-#if defined __BORLANDC__
-    // Borland returns EACCES if the dir exists...
-    if( EACCES != errno && EEXIST != errno )
-#else
     if( EEXIST != errno )
-#endif
     {
       return false;
     }
