@@ -122,7 +122,7 @@ bool Syncpod::minimizeToTray()
 
 void Syncpod::on_trayicon_menuitem_selected(const Glib::ustring&)
 {
-  g_print("Called back!");
+  g_print("Tray icon menu item selected!");
 }
 
 void Syncpod::on_trayicon_clicked()
