@@ -30,8 +30,3 @@ test = env.Program( 'fileinfo_test',
                     LIBS = [ 'synPod-utils', 'cppunitlite' ] + env['LIBS'] )
 
 test_alias = Alias('test', [test], test[0].abspath)
-
-test = env.Program( 'gtkmm_test',
-                    [ 'gtkmm.cpp' ] )
-
-test_alias = Alias('test', [test], test[0].abspath)
