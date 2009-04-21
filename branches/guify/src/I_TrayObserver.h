@@ -8,7 +8,6 @@ namespace GnomeSyncpod
   class I_TrayObserver
   {
   public:
-    virtual void on_trayicon_menuitem_selected(const Glib::ustring& item_name) = 0;
     virtual void on_trayicon_clicked() = 0;
   };
 }

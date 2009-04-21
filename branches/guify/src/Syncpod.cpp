@@ -32,7 +32,11 @@ Syncpod::Syncpod() :
                        sigc::mem_fun(*this, &Syncpod::on_action_file_open) );
   refActionGroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
                          sigc::mem_fun(*this, &Syncpod::on_action_file_quit) );
-  Glib::RefPtr<Gtk::UIManager> m_refUIManager = Gtk::UIManager::create();
+  refActionGroup->add( Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES),
+                       sigc::bind(sigc::mem_fun(*this, &Syncpod::on_trayicon_menuitem_selected),
+                                  "Preferences") );
+
+  m_refUIManager = Gtk::UIManager::create();
   m_refUIManager->insert_action_group(refActionGroup);
   add_accel_group(m_refUIManager->get_accel_group());
 
@@ -49,10 +53,16 @@ Syncpod::Syncpod() :
     " <toolbar name='ToolBar'>"
     "   <toolitem action='Quit'/>"
     " </toolbar>"
+    " <popup name='TrayPopup'>"
+    "   <menuitem action='Preferences' />"
+    " </popup>"
     "</ui>";
   m_refUIManager->add_ui_from_string(ui_info);
 
   add(m_box);
+
+  Gtk::Widget* pTrayMenu = m_refUIManager->get_widget("/TrayPopup");
+  m_statusIcon.set_menu(pTrayMenu);
 
   Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
   m_box.pack_start(*pMenubar, Gtk::PACK_SHRINK);
