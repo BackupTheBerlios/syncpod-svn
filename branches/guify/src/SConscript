@@ -16,6 +16,6 @@ binary = env.Program( "syncPod",
                       LIBPATH = [ '.' ],
                       LIBS = ['synPod-utils'] + env['LIBS'] )
 
-env.Program( "gnome-syncpod", [ "Syncpod.cpp", "TrayIcon.cpp" ])
+env.Program( "gnome-syncpod", [ "Syncpod.cpp", "TrayIcon.cpp", "ConfigDialog.cpp" ])
 
 Return( "directory", "binary", "library", "headers" )

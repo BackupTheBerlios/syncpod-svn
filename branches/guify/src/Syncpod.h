@@ -7,12 +7,14 @@
 
 #include "TrayIcon.h"
 #include "I_TrayObserver.h"
+#include "ConfigDialog.h"
 
 namespace GnomeSyncpod
 {
   class Syncpod : public Gtk::Window, public I_TrayObserver
   {
     TrayIcon m_statusIcon;
+    ConfigDialog m_configDialog;
     Glib::RefPtr<Gtk::UIManager>   m_refUIManager;
     std::pair<int, int>  window_position;
     Gtk::VBox m_box;

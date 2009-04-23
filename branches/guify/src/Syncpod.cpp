@@ -1,6 +1,7 @@
 // Copyright (C) 2009 by Jean-Baptiste LAB
 
 #include "Syncpod.h"
+#include "ConfigDialog.h"
 
 using namespace GnomeSyncpod;
 
@@ -13,6 +14,9 @@ Syncpod::Syncpod() :
 
   m_statusIcon.set_tooltip("gnome-syncpod is idle");
   m_statusIcon.set_observer(this);
+
+  m_configDialog.set_transient_for(*this);
+  m_configDialog.set_modal(true);
   
   if (m_minimizeToTray)
   {
@@ -43,18 +47,21 @@ Syncpod::Syncpod() :
   Glib::ustring ui_info =
     "<ui>"
     " <menubar name='MenuBar'>"
-    "    <menu action='MenuFile'>"
-    "      <menuitem action='New'/>"
-    "      <menuitem action='Open'/>"
-    "      <separator/>"
-    "      <menuitem action='Quit'/>"
-    "    </menu>"
+    "   <menu action='MenuFile'>"
+    "     <menuitem action='Preferences' />"
+    "     <separator/>"
+    "     <menuitem action='Quit'/>"
+    "   </menu>"
     " </menubar>"
     " <toolbar name='ToolBar'>"
+    "   <toolitem action='Preferences'/>"
+    "   <separator/>"
     "   <toolitem action='Quit'/>"
     " </toolbar>"
     " <popup name='TrayPopup'>"
     "   <menuitem action='Preferences' />"
+    "   <separator/>"
+    "   <menuitem action='Quit'/>"
     " </popup>"
     "</ui>";
   m_refUIManager->add_ui_from_string(ui_info);
@@ -122,6 +129,7 @@ bool Syncpod::minimizeToTray()
 
 void Syncpod::on_trayicon_menuitem_selected(const Glib::ustring&)
 {
+  m_configDialog.show();
   g_print("Tray icon menu item selected!");
 }
 
