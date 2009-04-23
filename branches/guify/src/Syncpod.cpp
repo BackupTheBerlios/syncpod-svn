@@ -30,10 +30,6 @@ Syncpod::Syncpod() :
 
   Glib::RefPtr<Gtk::ActionGroup> refActionGroup = Gtk::ActionGroup::create();
   refActionGroup->add( Gtk::Action::create("MenuFile", "_File") );
-  refActionGroup->add( Gtk::Action::create("New", Gtk::Stock::NEW),
-                       sigc::mem_fun(*this, &Syncpod::on_action_file_new) );
-  refActionGroup->add( Gtk::Action::create("Open", "Open file"),
-                       sigc::mem_fun(*this, &Syncpod::on_action_file_open) );
   refActionGroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
                          sigc::mem_fun(*this, &Syncpod::on_action_file_quit) );
   refActionGroup->add( Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES),
@@ -102,14 +98,6 @@ void Syncpod::minimize()
 {
   get_position(window_position.first, window_position.second);
   hide();  
-}
-
-void Syncpod::on_action_file_new()
-{
-}
-
-void Syncpod::on_action_file_open()
-{
 }
 
 void Syncpod::on_action_file_quit()

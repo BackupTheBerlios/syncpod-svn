@@ -24,8 +24,6 @@ namespace GnomeSyncpod
   
     void toggle_visible();
     void minimize();  
-    void on_action_file_new();
-    void on_action_file_open();
     void on_action_file_quit();
     virtual void on_trayicon_menuitem_selected(const Glib::ustring& item_name);
   public:
