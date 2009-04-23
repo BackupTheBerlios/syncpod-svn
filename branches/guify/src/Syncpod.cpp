@@ -118,7 +118,6 @@ bool Syncpod::minimizeToTray()
 void Syncpod::on_trayicon_menuitem_selected(const Glib::ustring&)
 {
   m_configDialog.show();
-  g_print("Tray icon menu item selected!");
 }
 
 void Syncpod::on_trayicon_clicked()
