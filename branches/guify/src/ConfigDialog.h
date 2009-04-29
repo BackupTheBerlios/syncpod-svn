@@ -7,7 +7,7 @@
 
 namespace GnomeSyncpod
 {
-  class ConfigDialog : public Gtk::Window
+  class ConfigDialog : public Gtk::Dialog
   {
     Gtk::VBox m_box;
     Gtk::Button m_ok;

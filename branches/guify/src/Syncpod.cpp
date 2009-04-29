@@ -15,9 +15,6 @@ Syncpod::Syncpod() :
   m_statusIcon.set_tooltip("gnome-syncpod is idle");
   m_statusIcon.set_observer(this);
 
-  m_configDialog.set_transient_for(*this);
-  m_configDialog.set_modal(true);
-  
   if (m_minimizeToTray)
   {
     signal_hide().connect(sigc::mem_fun(this, &Syncpod::minimize));
@@ -72,6 +69,8 @@ Syncpod::Syncpod() :
 
   Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar") ;
   m_box.pack_start(*pToolbar, Gtk::PACK_SHRINK);
+
+  m_configDialog.signal_response().connect(sigc::mem_fun(*this, &Syncpod::on_preferences_ok));
   
   show_all_children();
 }
@@ -105,6 +104,14 @@ void Syncpod::on_action_file_quit()
   Gtk::Main::quit();
 }
 
+void Syncpod::on_preferences_ok(int result)
+{
+  if(result == Gtk::RESPONSE_ACCEPT)
+  {
+  }
+  m_configDialog.hide();
+}
+
 bool Syncpod::showAtStartup()
 {
   return m_showAtStartup;
@@ -117,7 +124,7 @@ bool Syncpod::minimizeToTray()
 
 void Syncpod::on_trayicon_menuitem_selected(const Glib::ustring&)
 {
-  m_configDialog.show();
+  m_configDialog.run();
 }
 
 void Syncpod::on_trayicon_clicked()

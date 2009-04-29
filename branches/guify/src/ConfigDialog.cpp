@@ -4,27 +4,17 @@
 
 using namespace GnomeSyncpod;
 
-ConfigDialog::ConfigDialog() : m_ok("OK"),
-                               m_cancel("Cancel")
+ConfigDialog::ConfigDialog()
 {
   set_title("Gnome Syncpod Config");
   set_default_size(100,100);
 
-  add(m_box);
-  
-// Connect the clicked signal of the button to
-//   m_ok.signal_clicked().connect(sigc::mem_fun(*this,
-//                                               &ConfigDialok::on_ok_button_clicked) );
-//   m_box.add(m_ok);
-//   m_box.add(m_cancel);
-  m_box.pack_start(m_ok);
-  m_box.pack_start(m_cancel);
-  
-// Make the button the default widget
-  m_ok.set_flags(Gtk::CAN_DEFAULT);
-  m_ok.grab_default();
+  get_vbox()->pack_start(m_box);
+  add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+  add_button(Gtk::Stock::OK,     Gtk::RESPONSE_ACCEPT);
+  set_default_response(Gtk::RESPONSE_ACCEPT);
 
-  show_all_children();
+  get_vbox()->show_all();
 }
 
 ConfigDialog::~ConfigDialog()
